@@ -2,8 +2,8 @@ const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs').promises;
 const express = require('express');
 const URL_MONGODB = 'mongodb://localhost:27017';
-// const app = express()
-// let students = [];
+const app = express()
+let students = [];
 
 const main = async l =>{
     try {
@@ -12,28 +12,45 @@ const main = async l =>{
         const studentsName = await JSON.parse(buffer);
         // console.log(studentsName[21].name);
 
+        app.use(express.urlencoded({extended: true}));
         //Me connecter à la DB
-        const client = await MongoClient.connect(URL_MONGODB, { useUnifiedTopology: true });
-        const db = await client.db('classroom');
+        const client = await MongoClient.connect(URL_MONGODB, {useNewUrlParser: true, useUnifiedTopology: true });
+        const db = await client.db('classRoom');
 
         //Créer ma db et insérer mes données json
-        for(i = 0; i < studentsName.length; i++){
-            db.collection('students').insertOne(studentsName[i]);
-            // students.push(studentsName[i]);
+        for (i = 0; i < studentsName.length; i++){
+            // db.collection('students').insertOne(studentsName[i]);
+            students.push(studentsName[i].name);
         }
-        db.createCollection('groups');
+        // db.createCollection('groups');
 
-        // app.get('/', function (req, res) {
-        //     res.send('Hello World!')
-        // })
+        app.get('/students', function (req, res) {
+            res.send(students);
+        })
 
-        // app.post('/students', async (req, res) => {
-        //     res.send(students);        
-        // })
+        app.post('/studentss', async (req, res) => {
+            res.send(students);
+        })
+
+        app.post('/students', function (req, res) {
+            const myrep = req.body.name;
+            console.log(myrep);
+            db.collection("Students").insertOne({name: myrep}, (err, result) => {
+                if (err) throw err
+                console.log(result)
+                res.send("lol")
+            })
+        })
+
+        app.delete('/students/:name', async (req, res) => {
+            var studentList = 
+            res.send(students)
+            // console.log("DELETE!")
+        })
           
-        // app.listen(8080, function () {
-        //     console.log('Example app listening on port 8080!')
-        // })
+        app.listen(8080, function () {
+            console.log('Example app listening on port 8080!')
+        })
 
     } catch (e) {
         console.log(e);
