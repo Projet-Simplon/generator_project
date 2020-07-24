@@ -2,13 +2,15 @@ const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs').promises;
 const express = require('express');
 const URL_MONGODB = 'mongodb://localhost:27017';
+// const app = express()
+// let students = [];
 
 const main = async l =>{
     try {
         //Lire mon Json
         const buffer = await fs.readFile('students.json');
         const studentsName = await JSON.parse(buffer);
-        console.log(studentsName[21].name);
+        // console.log(studentsName[21].name);
 
         //Me connecter à la DB
         const client = await MongoClient.connect(URL_MONGODB, { useUnifiedTopology: true });
@@ -17,8 +19,21 @@ const main = async l =>{
         //Créer ma db et insérer mes données json
         for(i = 0; i < studentsName.length; i++){
             db.collection('students').insertOne(studentsName[i]);
+            // students.push(studentsName[i]);
         }
         db.createCollection('groups');
+
+        // app.get('/', function (req, res) {
+        //     res.send('Hello World!')
+        // })
+
+        // app.post('/students', async (req, res) => {
+        //     res.send(students);        
+        // })
+          
+        // app.listen(8080, function () {
+        //     console.log('Example app listening on port 8080!')
+        // })
 
     } catch (e) {
         console.log(e);
@@ -27,7 +42,16 @@ const main = async l =>{
 
 main();
 
-console.log("MDR");
+
+
+
+
+
+
+
+
+
+// console.log("MDR"); //
 
 // const MongoClient = require('mongodb').MongoClient;
 // const fs = require('fs').promises;
@@ -50,3 +74,7 @@ console.log("MDR");
 //     }
 // }
 // my_func();
+
+
+
+
