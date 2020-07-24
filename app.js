@@ -27,6 +27,8 @@ const main = async l =>{
 
 main();
 
+console.log("MDR");
+
 // const MongoClient = require('mongodb').MongoClient;
 // const fs = require('fs').promises;
 // const fetch = require('node-fetch');
