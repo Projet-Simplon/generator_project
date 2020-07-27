@@ -5,7 +5,7 @@ const URL_MONGODB = 'mongodb://localhost:27017';
 const app = express()
 let students = [];
 
-const main = async l =>{
+const main = async l => {
     try {
         //Lire mon Json
         const buffer = await fs.readFile('students.json');
@@ -34,18 +34,25 @@ const main = async l =>{
 
         app.post('/students', function (req, res) {
             const myrep = req.body.name;
-            console.log(myrep);
-            db.collection("Students").insertOne({name: myrep}, (err, result) => {
-                if (err) throw err
-                console.log(result)
-                res.send("lol")
-            })
+            for (i = 0; i < myrep.length; i++) {
+                db.collection("Students").insertOne({name: myrep[i]});
+            }
+            // console.log(myrep);
+            // db.collection("Students").insertOne({name: myrep}, (err, result) => {
+            //     if (err) throw err
+            //     console.log(result)
+            //     res.send("lol")
+            // })
         })
 
         app.delete('/students/:name', async (req, res) => {
-            var studentList = 
-            res.send(students)
-            // console.log("DELETE!")
+            var paramName = req.params.name;
+            await db.collection("Students").deleteOne({name: paramName})
+            // for (i = 0; i < paramName; i++) {
+            //     db.collection("Students").remove
+            // }
+            // if (params.toLowerCase() === Element.name.toLocaleLowerCase()) {
+            // }
         })
           
         app.listen(8080, function () {
